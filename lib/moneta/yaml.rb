@@ -7,11 +7,11 @@ module Moneta
       def initialize(file)
         @file = file
       end
-      
+
       def [](key)
         yaml[key]['expires'] if yaml.has_key?(key)
       end
-      
+
       def []=(key, value)
         hash = yaml
         if hash.has_key?(key)
@@ -19,7 +19,7 @@ module Moneta
           save(hash)
         end
       end
-      
+
       def delete(key)
         hash = yaml
         if hash.has_key?(key)
@@ -37,33 +37,33 @@ module Moneta
         ::File.open(@file, "w") { |file| file << hash.to_yaml }
       end
     end
-    
+
     def initialize(options = {})
       @file = File.expand_path(options[:path])
       unless ::File.exists?(@file)
         File.open(@file, "w") { |file| file << {}.to_yaml }
       end
- 
+
       @expiration = Expiration.new(@file)
     end
-    
+
     module Implementation
       def key?(key)
         yaml.has_key?(key)
       end
-      
+
       alias has_key? key?
-      
+
       def [](key)
         yaml[key]['value'] if yaml.has_key?(key)
       end
-      
+
       def []=(key, value)
         hash = yaml
         (hash[key] ||= {})['value'] = value
         save(hash)
       end
-            
+
       def delete(key)
         hash = yaml
         value = self[key]
@@ -71,7 +71,7 @@ module Moneta
         save(hash)
         value
       end
-            
+
       def clear
         save
       end

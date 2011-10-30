@@ -11,7 +11,7 @@ end
 module Moneta
   class Memcache
     include Defaults
-    
+
     def initialize(options = {})
       @cache = MemCache.new(options.delete(:server), options)
     end

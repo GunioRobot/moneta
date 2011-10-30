@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 begin
   require "moneta/datamapper"
-  
+
   describe "Moneta::DataMapper" do
 
     describe "default repository" do
@@ -10,7 +10,7 @@ begin
         @cache = Moneta::DataMapper.new(:setup => "sqlite3::memory:")
         @cache.clear
       end
-  
+
       after(:all) do
         repository(:moneta) { MonetaHash.auto_migrate! }
       end

@@ -62,15 +62,15 @@ module Moneta
       end
     end
   end
-  
+
   module Defaults
     def fetch(key, value = nil)
       value ||= block_given? ? yield(key) : default
       self[key] || value
     end
-    
+
     def store(key, value, options = {})
       self[key] = value
-    end        
+    end
   end
 end

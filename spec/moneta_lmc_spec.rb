@@ -13,11 +13,11 @@ begin
     before(:all) do
       @cache = $lmc_cache
     end
-    
+
     after(:each) do
       @cache.clear
     end
-    
+
     it_should_behave_like "a read/write Moneta cache"
   end
 rescue SystemExit

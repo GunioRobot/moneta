@@ -19,7 +19,7 @@ module Moneta
         self.extend(StringExpires)
       end
     end
-    
+
     module Implementation
       def key?(key)
         nil | self[key]

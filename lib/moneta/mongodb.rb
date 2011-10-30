@@ -8,7 +8,7 @@ end
 module Moneta
   class MongoDB
     include Defaults
-    
+
     def initialize(options = {})
       options = {
         :host => ENV['MONGO_RUBY_DRIVER_HOST'] || 'localhost',

@@ -8,7 +8,7 @@ end
 module Moneta
   class Couch
     include Defaults
-    
+
     def initialize(options = {})
       @db = ::CouchRest.database!(options[:db])
       unless options[:skip_expires]

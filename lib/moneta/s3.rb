@@ -2,7 +2,7 @@ begin
   require "right_aws"
 rescue LoadError
   puts "You need the RightScale AWS gem to use the S3 moneta store"
-  exit  
+  exit
 end
 
 module Moneta
@@ -15,11 +15,11 @@ module Moneta
   #   require 'moneta/s3'
   #
   #   store = Moneta::S3.new(
-  #     :access_key_id => 'ACCESS_KEY_ID', 
-  #     :secret_access_key => 'SECRET_ACCESS_KEY', 
+  #     :access_key_id => 'ACCESS_KEY_ID',
+  #     :secret_access_key => 'SECRET_ACCESS_KEY',
   #     :bucket => 'a_bucket'
   #   )
-  #   store['somefile'] 
+  #   store['somefile']
   class S3
     # Initialize the Moneta::S3 store.
     #
@@ -32,30 +32,30 @@ module Moneta
     def initialize(options = {})
       validate_options(options)
       s3 = RightAws::S3.new(
-        options[:access_key_id], 
-        options[:secret_access_key], 
+        options[:access_key_id],
+        options[:secret_access_key],
         {
-          :logger => logger, 
+          :logger => logger,
           :multi_thread => options.delete(:multi_thread) || false
         }
       )
       @bucket = s3.bucket(options.delete(:bucket), true)
     end
-    
+
     def key?(key)
       !s3_key(key).nil?
     end
-    
+
     alias has_key? key?
-    
+
     def [](key)
       get(key)
     end
-    
+
     def []=(key, value)
       store(key, value)
     end
-        
+
     def delete(key)
       k = s3_key(key)
       if k
@@ -64,9 +64,9 @@ module Moneta
         value
       end
     end
-    
+
     # Store the key/value pair.
-    # 
+    #
     # Options:
     # *<tt>:meta_headers</tt>: Meta headers passed to S3
     # *<tt>:perms</tt>: Permissions passed to S3
@@ -77,7 +77,7 @@ module Moneta
       meta_headers = meta_headers_from_options(options)
       perms = options[:perms]
       headers = options[:headers] || {}
-      
+
       case value
       when IO
         @bucket.put(key, value.read, meta_headers, perms, headers)
@@ -85,17 +85,17 @@ module Moneta
         @bucket.put(key, value, meta_headers, perms, headers)
       end
     end
-    
+
     def update_key(key, options = {})
       debug "update_key(key=#{key}, options=#{options.inspect})"
       k = s3_key(key, false)
       k.save_meta(meta_headers_from_options(options)) unless k.nil?
     end
-    
+
     def clear
       @bucket.clear
     end
-    
+
     protected
     def logger
       @logger ||= begin
@@ -104,7 +104,7 @@ module Moneta
         logger
       end
     end
-    
+
     private
     def validate_options(options)
       unless options[:access_key_id]
@@ -117,12 +117,12 @@ module Moneta
         raise RuntimeError, ":bucket is required in options"
       end
     end
-    
+
     def get(key)
       k = s3_key(key)
       k.nil? ? nil : k.get
     end
-    
+
     def s3_key(key, nil_if_expired=true)
       begin
         s3_key = @bucket.key(key, true)
@@ -145,7 +145,7 @@ module Moneta
       end
       nil
     end
-    
+
     def meta_headers_from_options(options={})
       meta_headers = options[:meta_headers] || {}
       if options[:expires_in]
@@ -154,7 +154,7 @@ module Moneta
       debug "setting expires-at: #{meta_headers['expires-at']}"
       meta_headers
     end
-    
+
     def debug(message)
       logger.debug "[Moneta::S3] #{message}"
     end

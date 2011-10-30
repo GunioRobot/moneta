@@ -9,7 +9,7 @@ begin
       @cache = Moneta::Redis.new
       @cache.clear
     end
-  
+
     it_should_behave_like "a read/write Moneta cache"
   end
 rescue SystemExit
